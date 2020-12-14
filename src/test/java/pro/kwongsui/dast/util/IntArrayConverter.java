@@ -15,7 +15,7 @@ public class IntArrayConverter implements ArgumentConverter {
     }
     try {
       if (((String) source).length() == 0) {
-        return new Integer[0];
+        return new int[0];
       }
       String[] ints = ((String) source).split(",");
       int[] ret = new int[ints.length];
