@@ -1,10 +1,11 @@
 package pro.kwongsui.dast.stack;
 
-import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Queue;
 
 public class StackQueue<E> {
-  private Deque<E> data = new LinkedList<>();
+
+  private final Queue<E> data = new LinkedList<>();
 
   public StackQueue() {}
 
@@ -26,7 +27,4 @@ public class StackQueue<E> {
     return data.peek();
   }
 
-  public boolean isEmpty() {
-    return data.isEmpty();
-  }
 }

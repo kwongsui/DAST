@@ -1,43 +1,42 @@
 package pro.kwongsui.dast.stack;
 
-public class StackArray<E> {
-  private static final int DEFAULT_CAPACITY = 10;
-  private E[] data;
-  private int capacity;
+public class StackArray {
+
+  private int[] data;
+  private final int capacity;
   private int size;
 
-  public StackArray() {
-    this(DEFAULT_CAPACITY);
-  }
 
   public StackArray(int capacity) {
-    data = (E[]) new Object[capacity];
+    data = new int[capacity];
     this.capacity = capacity;
     size = 0;
   }
 
-  public void push(Object o) {
-    if (size == capacity) resize();
-    data[size++] = (E) o;
+  public void push(int val) {
+    if (size == capacity) {
+      resize();
+    }
+    data[size++] = val;
   }
 
   private void resize() {
-    E[] newData = (E[]) new Object[capacity * 2];
+    int[] newData = new int[size * 2];
     System.arraycopy(data, 0, newData, 0, size);
     data = newData;
   }
 
-  public E pop() {
-    if (isEmpty()) return null;
+  public int pop() {
+    if (size == 0) {
+      return -1;
+    }
     return data[size-- - 1];
   }
 
-  public E peek() {
-    if (isEmpty()) return null;
+  public int peek() {
+    if (size == 0) {
+      return -1;
+    }
     return data[size - 1];
-  }
-
-  public boolean isEmpty() {
-    return size == 0;
   }
 }

@@ -1,46 +1,32 @@
 package pro.kwongsui.dast.stack;
 
-public class StackLinkedList<E> {
-  private Node<E> top = null;
+import pro.kwongsui.dast.linkedlist.Node;
 
-  public void push(Object o) {
-    Node<E> newNode = new Node<>((E) o);
+public class StackLinkedList {
 
-    if (top == null) top = newNode;
-    else {
+  private Node top = null;
+
+  public void push(int val) {
+    Node newNode = new Node(val);
+    if (top != null) {
       newNode.next = top;
-      top = newNode;
     }
+    top = newNode;
   }
 
-  public E pop() {
-    if (isEmpty()) return null;
-
-    E e = top.element;
+  public int pop() {
+    if (top == null) {
+      return -1;
+    }
+    int val = top.value;
     top = top.next;
-
-    return e;
+    return val;
   }
 
-  public E peek() {
-    if (isEmpty()) return null;
-    return top.element;
-  }
-
-  public boolean isEmpty() {
-    return top == null;
-  }
-
-  public void clear() {
-    top = null;
-  }
-
-  static class Node<E> {
-    E element;
-    Node<E> next;
-
-    Node(E e) {
-      element = e;
+  public int peek() {
+    if (top == null) {
+      return -1;
     }
+    return top.value;
   }
 }
