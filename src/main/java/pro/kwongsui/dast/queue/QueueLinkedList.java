@@ -1,13 +1,15 @@
 package pro.kwongsui.dast.queue;
 
-public class QueueLinkedList<E> {
-  private Node<E> head, tail;
+import pro.kwongsui.dast.linkedlist.Node;
+
+public class QueueLinkedList {
+
+  private Node head, tail;
 
   public QueueLinkedList() {}
 
-  public void enqueue(Object o) {
-    Node<E> newNode = new Node<>((E) o);
-
+  public void enqueue(int val) {
+    Node newNode = new Node(val);
     if (tail == null) {
       head = tail = newNode;
     } else {
@@ -16,23 +18,15 @@ public class QueueLinkedList<E> {
     }
   }
 
-  public E dequeue() {
-    if (head == null) return null;
-
-    E e = head.element;
-    head = head.next;
-
-    if (head == null) tail = null;
-
-    return e;
-  }
-
-  static class Node<E> {
-    E element;
-    Node<E> next;
-
-    Node(E e) {
-      element = e;
+  public int dequeue() {
+    if (head == null) {
+      return -1;
     }
+    int val = head.value;
+    head = head.next;
+    if (head == null) {
+      tail = null;
+    }
+    return val;
   }
 }

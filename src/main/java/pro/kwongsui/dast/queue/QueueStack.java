@@ -1,29 +1,37 @@
 package pro.kwongsui.dast.queue;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
 
 public class QueueStack<E> {
-  private Deque<E> in = new LinkedList<>();
-  private Deque<E> out = new LinkedList<>();
-  private E front;
 
-  public void enqueue(E x) {
-    if (in.isEmpty()) front = x;
+  private final Deque<Integer> in = new ArrayDeque<>();
+  private final Deque<Integer> out = new ArrayDeque<>();
+  private int front;
+
+  public void enqueue(int x) {
+    if (in.isEmpty()) {
+      front = x;
+    }
     in.push(x);
   }
 
-  public E dequeue() {
-    if (out.isEmpty()) while (!in.isEmpty()) out.push(in.pop());
+  public int dequeue() {
+    if (out.isEmpty()) {
+      while (!in.isEmpty()) {
+        out.push(in.pop());
+      }
+    }
     return out.pop();
   }
 
-  public E peek() {
-    if (out.isEmpty()) return front;
-    return out.peek();
-  }
-
-  public boolean isEmpty() {
-    return in.isEmpty() && out.isEmpty();
+  public int peek() {
+    if (in.isEmpty() && out.isEmpty()) {
+      return -1;
+    } else if (out.isEmpty()) {
+      return front;
+    } else {
+      return out.peek();
+    }
   }
 }
