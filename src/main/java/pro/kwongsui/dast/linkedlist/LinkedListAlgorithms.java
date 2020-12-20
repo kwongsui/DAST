@@ -1,6 +1,6 @@
 package pro.kwongsui.dast.linkedlist;
 
-public class LinkedListAlgorithms<E> {
+public class LinkedListAlgorithms {
 
   /**
    * 单链表反转

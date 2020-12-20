@@ -3,7 +3,7 @@ package pro.kwongsui.dast.queue;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class QueueStack<E> {
+public class QueueStack {
 
   private final Deque<Integer> in = new ArrayDeque<>();
   private final Deque<Integer> out = new ArrayDeque<>();
