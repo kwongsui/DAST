@@ -1,47 +1,38 @@
 package pro.kwongsui.dast.tree;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
-public class BinarySearchTree<E> {
-  private final Comparator<E> comparator;
+public class BinarySearchTree {
 
-  public List<E> list = new ArrayList<>(); // Only for unit test
-  private TreeNode<E> tree;
-
-  public BinarySearchTree() {
-    comparator = (e1, e2) -> ((Comparable<E>) e1).compareTo(e2);
-  }
-
-  public BinarySearchTree(Comparator<E> c) {
-    comparator = c;
-  }
+  private TreeNode tree;
 
   /**
    * 支持重复数据插入，重复数据当作大于已有数据处理
    */
-  public void insert(E e) {
-    TreeNode<E> newTreeNode = new TreeNode<>(e, null, null, null);
+  public void insert(int val) {
+    TreeNode newTreeNode = new TreeNode(val, null, null, null);
     if (tree == null) {
       tree = newTreeNode;
     } else {
-      TreeNode<E> p = null, q = tree;
+      TreeNode p = null, q = tree;
       while (q != null) {
-        if (comparator.compare(e, q.element) < 0) {
+        if (val < q.val) {
           p = q;
           q = q.left;
+          if (q == null) {
+            p.left = newTreeNode;
+          }
         } else {
           p = q;
           q = q.right;
+          if (q == null) {
+            p.right = newTreeNode;
+          }
         }
-      }
-      if (comparator.compare(e, p.element) < 0) {
-        p.left = newTreeNode;
-      } else {
-        p.right = newTreeNode;
       }
       newTreeNode.parent = p;
     }
@@ -49,36 +40,40 @@ public class BinarySearchTree<E> {
 
   /**
    * 1. 待删除的节点没有左子树
-   * 2. 待删除的节点有左子树，考虑两种情况：
+   * 2. 待删除的节点有左子树，找到左子树中值最大的节点，替换待删除节点，考虑两种情况：
    *    2.1 左子节点没有右子节点
    *    2.2 左子节点有右子节点，找到左子树中的最右节点
    */
-  public void delete(E e) {
-    TreeNode<E> p = search(e);
+  public void delete(int val) {
+    TreeNode p = search(val);
     if (p == null) {
       return;
     }
     if (p.left == null) {
-      if (p.parent.left == p) {
-        p.parent.left = p.right;
+      if (p.parent == null) {
+        tree = p.right;
       } else {
-        p.parent.right = p.right;
+        if (p.parent.left == p) {
+          p.parent.left = p.right;
+        } else {
+          p.parent.right = p.right;
+        }
       }
       // 删除要确保父子节点同步更新
       if (p.right != null) {
         p.right.parent = p.parent;
       }
     } else {
-      TreeNode<E> q = p.left;
+      TreeNode q = p.left;
       if (q.right == null) {
-        p.element = q.element;
+        p.val = q.val;
         p.left = q.left;
       } else {
         while (q.right != null) {
           q = q.right;
         }
-        p.element = q.element;
-        q.parent.right = q.left;
+        p.val = q.val;
+        q.parent.right = q.left;  // q是最右节点，右子节点为空
       }
       // 删除要确保父子节点同步更新
       if (q.left != null) {
@@ -87,19 +82,19 @@ public class BinarySearchTree<E> {
     }
   }
 
-  public void deleteSame(E e) {
-    List<TreeNode<E>> list = searchSame(e);
-    for (TreeNode<E> node : list) {
-      delete(node.element);
+  public void deleteSame(int val) {
+    List<TreeNode> list = searchSame(val);
+    for (TreeNode node : list) {
+      delete(node.val);
     }
   }
 
-  public TreeNode<E> search(E e) {
-    TreeNode<E> p = tree;
+  public TreeNode search(int val) {
+    TreeNode p = tree;
     while (p != null) {
-      if (comparator.compare(e, p.element) < 0) {
+      if (val < p.val) {
         p = p.left;
-      } else if (comparator.compare(e, p.element) > 0) {
+      } else if (val > p.val) {
         p = p.right;
       } else {
         return p;
@@ -108,14 +103,14 @@ public class BinarySearchTree<E> {
     return null;
   }
 
-  public List<TreeNode<E>> searchSame(E e) {
-    List<TreeNode<E>> list = new ArrayList<>();
-    TreeNode<E> p = tree;
+  public List<TreeNode> searchSame(int val) {
+    List<TreeNode> list = new ArrayList<>();
+    TreeNode p = tree;
     while (p != null) {
-      if (comparator.compare(e, p.element) < 0) {
+      if (val < p.val) {
         p = p.left;
       } else {
-        if (comparator.compare(e, p.element) == 0) {
+        if (val == p.val) {
           list.add(p);
         }
         p = p.right;
@@ -124,22 +119,22 @@ public class BinarySearchTree<E> {
     return list;
   }
 
-  public TreeNode<E> searchMax() {
+  public TreeNode searchMax() {
     if (tree == null) {
       return null;
     }
-    TreeNode<E> p = tree;
+    TreeNode p = tree;
     while (p.right != null) {
       p = p.right;
     }
     return p;
   }
 
-  public TreeNode<E> searchMin() {
+  public TreeNode searchMin() {
     if (tree == null) {
       return null;
     }
-    TreeNode<E> p = tree;
+    TreeNode p = tree;
     while (p.left != null) {
       p = p.left;
     }
@@ -152,12 +147,12 @@ public class BinarySearchTree<E> {
    * 2. 若结点treeNode的左子树为空，从结点treeNode开始向上查找，直到遇到一个结点，其左子节点不再是结点
    *    treeNode的祖先
    */
-  public TreeNode<E> searchPrev(E e) {
-    TreeNode<E> treeNode = search(e);
+  public TreeNode searchPrev(int val) {
+    TreeNode treeNode = search(val);
     if (treeNode == null) {
       return null;
     }
-    TreeNode<E> p;
+    TreeNode p;
     if (treeNode.left != null) {
       p = treeNode.left;
       while (p.right != null) {
@@ -165,7 +160,7 @@ public class BinarySearchTree<E> {
       }
     } else {
       p = treeNode.parent;
-      TreeNode<E> q = treeNode;
+      TreeNode q = treeNode;
       while (p != null && p.left == q) {
         q = p;
         p = p.parent;
@@ -180,12 +175,12 @@ public class BinarySearchTree<E> {
    * 2. 若结点treeNode的右子树为空，从结点treeNode开始向上查找，直到遇到一个结点，其右子节点不再是结点
    *    treeNode的祖先
    */
-  public TreeNode<E> searchNext(E e) {
-    TreeNode<E> treeNode = search(e);
+  public TreeNode searchNext(int val) {
+    TreeNode treeNode = search(val);
     if (treeNode == null) {
       return null;
     }
-    TreeNode<E> p;
+    TreeNode p;
     if (treeNode.right != null) {
       p = treeNode.right;
       while (p.left != null) {
@@ -193,7 +188,7 @@ public class BinarySearchTree<E> {
       }
     } else {
       p = treeNode.parent;
-      TreeNode<E> q = treeNode;
+      TreeNode q = treeNode;
       while (p != null && p.right == q) {
         q = p;
         p = p.parent;
@@ -202,54 +197,54 @@ public class BinarySearchTree<E> {
     return p;
   }
 
-  public void preOrder() {
-    preOrder(tree);
+  public void preOrder(List<Integer> list) {
+    preOrder(tree, list);
   }
 
-  private void preOrder(TreeNode<E> treeNode) {
+  private void preOrder(TreeNode treeNode, List<Integer> list) {
     if (treeNode == null) {
       return;
     }
-    list.add(treeNode.element);
-    preOrder(treeNode.left);
-    preOrder(treeNode.right);
+    list.add(treeNode.val);
+    preOrder(treeNode.left, list);
+    preOrder(treeNode.right, list);
   }
 
-  public void inOrder() {
-    inOrder(tree);
+  public void inOrder(List<Integer> list) {
+    inOrder(tree, list);
   }
 
-  private void inOrder(TreeNode<E> treeNode) {
+  private void inOrder(TreeNode treeNode, List<Integer> list) {
     if (treeNode == null) {
       return;
     }
-    inOrder(treeNode.left);
-    list.add(treeNode.element);
-    inOrder(treeNode.right);
+    inOrder(treeNode.left, list);
+    list.add(treeNode.val);
+    inOrder(treeNode.right, list);
   }
 
-  public void postOrder() {
-    postOrder(tree);
+  public void postOrder(List<Integer> list) {
+    postOrder(tree, list);
   }
 
-  public void postOrder(TreeNode<E> treeNode) {
+  private void postOrder(TreeNode treeNode, List<Integer> list) {
     if (treeNode == null) {
       return;
     }
-    postOrder(treeNode.left);
-    postOrder(treeNode.right);
-    list.add(treeNode.element);
+    postOrder(treeNode.left, list);
+    postOrder(treeNode.right, list);
+    list.add(treeNode.val);
   }
 
-  public void bfs() {
+  public void bfs(List<Integer> list) {
     if (tree == null) {
       return;
     }
-    Queue<TreeNode<E>> queue = new LinkedList<>();
+    Queue<TreeNode> queue = new LinkedList<>();
     queue.offer(tree);
     while (!queue.isEmpty()) {
-      TreeNode<E> treeNode = queue.poll();
-      list.add(treeNode.element);
+      TreeNode treeNode = queue.poll();
+      list.add(treeNode.val);
       if (treeNode.left != null) {
         queue.offer(treeNode.left);
       }
@@ -263,11 +258,20 @@ public class BinarySearchTree<E> {
     return height(tree);
   }
 
-  private int height(TreeNode<E> treeNode) {
+  private int height(TreeNode node) {
     // 高度从0开始计算
-    if (treeNode == null) {
+    if (node == null) {
       return -1;
     }
-    return Math.max(height(treeNode.left), height(treeNode.right)) + 1;
+    return Math.max(height(node.left), height(node.right)) + 1;
+  }
+
+  public void updateDepth(TreeNode treeNode, int depth, Map<TreeNode, Integer> map) {
+    if (treeNode == null) {
+      return;
+    }
+    map.put(treeNode, depth);
+    updateDepth(treeNode.left, depth + 1, map);
+    updateDepth(treeNode.right, depth + 1, map);
   }
 }
