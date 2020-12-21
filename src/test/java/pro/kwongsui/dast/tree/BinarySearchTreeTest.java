@@ -31,7 +31,7 @@ class BinarySearchTreeTest {
         bst.insert(val1);
         bst.insert(val2);
         List<Integer> list = new ArrayList<>();
-        bst.inOrder(list);
+        bst.inorder(list);
         Assertions.assertIterableEquals(Arrays.asList(expected), list);
     }
 
@@ -44,7 +44,7 @@ class BinarySearchTreeTest {
     void delete(int val, @ConvertWith(IntegerArrayConverter.class) Integer[] expected) {
         bst.delete(val);
         List<Integer> list = new ArrayList<>();
-        bst.inOrder(list);
+        bst.inorder(list);
         Assertions.assertIterableEquals(Arrays.asList(expected), list);
     }
 
@@ -62,12 +62,12 @@ class BinarySearchTreeTest {
         bst.insert(val);
 
         List<Integer> list = new ArrayList<>();
-        bst.inOrder(list);
+        bst.inorder(list);
         Assertions.assertIterableEquals(Arrays.asList(expected1), list);
 
         bst.deleteSame(val);
         list.clear();
-        bst.inOrder(list);
+        bst.inorder(list);
         Assertions.assertIterableEquals(Arrays.asList(expected2), list);
     }
 
@@ -150,7 +150,7 @@ class BinarySearchTreeTest {
     })
     void preOrder(@ConvertWith(IntegerArrayConverter.class) Integer[] expected) {
         List<Integer> list = new ArrayList<>();
-        bst.preOrder(list);
+        bst.preorder(list);
         Assertions.assertIterableEquals(Arrays.asList(expected), list);
     }
 
@@ -160,7 +160,7 @@ class BinarySearchTreeTest {
     })
     void inOrder(@ConvertWith(IntegerArrayConverter.class) Integer[] expected) {
         List<Integer> list = new ArrayList<>();
-        bst.inOrder(list);
+        bst.inorder(list);
         Assertions.assertIterableEquals(Arrays.asList(expected), list);
     }
 
@@ -170,7 +170,7 @@ class BinarySearchTreeTest {
     })
     void postOrder(@ConvertWith(IntegerArrayConverter.class) Integer[] expected) {
         List<Integer> list = new ArrayList<>();
-        bst.postOrder(list);
+        bst.postorder(list);
         Assertions.assertIterableEquals(Arrays.asList(expected), list);
     }
 

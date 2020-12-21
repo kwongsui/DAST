@@ -1,6 +1,8 @@
 package pro.kwongsui.dast.tree;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -197,43 +199,104 @@ public class BinarySearchTree {
     return p;
   }
 
-  public void preOrder(List<Integer> list) {
-    preOrder(tree, list);
+  public void preorder(List<Integer> list) {
+    preorder(tree, list);
   }
 
-  private void preOrder(TreeNode treeNode, List<Integer> list) {
+  private void preorder(TreeNode treeNode, List<Integer> list) {
     if (treeNode == null) {
       return;
     }
     list.add(treeNode.val);
-    preOrder(treeNode.left, list);
-    preOrder(treeNode.right, list);
+    preorder(treeNode.left, list);
+    preorder(treeNode.right, list);
   }
 
-  public void inOrder(List<Integer> list) {
-    inOrder(tree, list);
-  }
-
-  private void inOrder(TreeNode treeNode, List<Integer> list) {
+  public void preorderNonRecursion(TreeNode treeNode, List<Integer> list) {
     if (treeNode == null) {
       return;
     }
-    inOrder(treeNode.left, list);
-    list.add(treeNode.val);
-    inOrder(treeNode.right, list);
+    Deque<TreeNode> stack = new ArrayDeque<>();
+    stack.push(treeNode);
+    while (!stack.isEmpty()) {
+      TreeNode p = stack.pop();
+      list.add(p.val);
+      if (p.right != null) {
+        stack.push(p.right);
+      }
+      if (p.left != null) {
+        stack.push(p.left);
+      }
+    }
   }
 
-  public void postOrder(List<Integer> list) {
-    postOrder(tree, list);
+  public void inorder(List<Integer> list) {
+    inorder(tree, list);
   }
 
-  private void postOrder(TreeNode treeNode, List<Integer> list) {
+  private void inorder(TreeNode treeNode, List<Integer> list) {
     if (treeNode == null) {
       return;
     }
-    postOrder(treeNode.left, list);
-    postOrder(treeNode.right, list);
+    inorder(treeNode.left, list);
     list.add(treeNode.val);
+    inorder(treeNode.right, list);
+  }
+
+  public void inorderNonRecursion(TreeNode treeNode, List<Integer> list) {
+    if (treeNode == null) {
+      return;
+    }
+    Deque<TreeNode> stack = new ArrayDeque<>();
+    TreeNode p = treeNode;
+    while (p != null || !stack.isEmpty()) {
+      while (p != null) {
+        stack.push(p);
+        p = p.left;
+      }
+      p = stack.pop();
+      list.add(p.val);
+      p = p.right;
+    }
+  }
+
+  public void postorder(List<Integer> list) {
+    postorder(tree, list);
+  }
+
+  private void postorder(TreeNode treeNode, List<Integer> list) {
+    if (treeNode == null) {
+      return;
+    }
+    postorder(treeNode.left, list);
+    postorder(treeNode.right, list);
+    list.add(treeNode.val);
+  }
+
+  public void postorderNonRecursion(TreeNode treeNode, List<Integer> list) {
+    if (treeNode == null) {
+      return;
+    }
+    Deque<TreeNode> stack = new ArrayDeque<>();
+    TreeNode p = treeNode;
+    while (p != null || !stack.isEmpty()) {
+      while (p != null) {
+        if (p.right != null) {
+          stack.push(p.right);
+        }
+        stack.push(p);
+        p = p.left;
+      }
+      p = stack.pop();
+      if(!stack.isEmpty() && stack.peek() == p.right) {
+        stack.pop();
+        stack.push(p);
+        p = p.right;
+      } else {
+        list.add(p.val);
+        p = null;
+      }
+    }
   }
 
   public void bfs(List<Integer> list) {
@@ -266,6 +329,9 @@ public class BinarySearchTree {
     return Math.max(height(node.left), height(node.right)) + 1;
   }
 
+  /**
+   * 深度从根节点开始记录，初始值0，调用方式 updateDepth(root, 0, map)
+   */
   public void updateDepth(TreeNode treeNode, int depth, Map<TreeNode, Integer> map) {
     if (treeNode == null) {
       return;
