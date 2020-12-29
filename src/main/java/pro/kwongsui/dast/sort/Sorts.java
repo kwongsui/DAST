@@ -1,18 +1,6 @@
 package pro.kwongsui.dast.sort;
 
-import java.util.Arrays;
-
 public class Sorts {
-
-  public static void main(String[] args) {
-    int[] list = {6, 11, 3, 9, 8};
-    //    bubble(list, list.length);
-    //    insert(list, list.length);
-    //    select(list, list.length);
-    //    merge(list, list.length);
-    //    quick(list, list.length);
-    System.out.println(Arrays.toString(list));
-  }
 
   private static void bubble(int[] arr, int n) {
     boolean needNextPass = true;

@@ -1,11 +1,14 @@
 package pro.kwongsui.dast.sort;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class SortQuick {
-  public static void quick(int[] arr, int n) {
+  public void quick(int[] arr, int n) {
     quick(arr, 0, n - 1);
   }
 
-  private static void quick(int[] arr, int left, int right) {
+  private void quick(int[] arr, int left, int right) {
     if (left >= right) return;
 
     int pivot = partition(arr, left, right);
@@ -13,7 +16,7 @@ public class SortQuick {
     quick(arr, pivot + 1, right);
   }
 
-  private static int partition(int[] arr, int left, int right) {
+  private int partition(int[] arr, int left, int right) {
     int pivot = arr[right];
     // i把arr分成两部分，arr[left…i-1]元素小于pivot，是"已处理区间"，A[i…right-1]是"未处理区间"
     int i = left;
@@ -30,5 +33,24 @@ public class SortQuick {
     arr[right] = temp;
 
     return i;
+  }
+
+  public void quickNonRecursion(int[] arr) {
+    Deque<Integer> stack = new ArrayDeque<>();
+    stack.push(arr.length - 1);
+    stack.push(0);
+    while (!stack.isEmpty()) {
+      int lower = stack.pop();
+      int upper = stack.pop();
+      int pivot = partition(arr, lower, upper);
+      if (lower < pivot - 1) {
+        stack.push(pivot - 1);
+        stack.push(lower);
+      }
+      if (upper > pivot + 1) {
+        stack.push(upper);
+        stack.push(pivot + 1);
+      }
+    }
   }
 }
