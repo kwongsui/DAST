@@ -1,8 +1,8 @@
 package pro.kwongsui.dast.heap;
 
-public class Heap<E extends Comparable<E>> {
+public class Heap {
 
-  public void heapify(E[] data) {
+  public void heapify(int[] data) {
     int n = data.length - 1;
     int index = (n - 1) / 2;
     while (index >= 0) {
@@ -10,14 +10,14 @@ public class Heap<E extends Comparable<E>> {
     }
   }
 
-  public void delete(E[] data) {
+  public void delete(int[] data) {
     int n = data.length - 1;
     heapify(data);
     data[0] = data[n--];
     siftDown(data, n, 0);
   }
 
-  public void sort(E[] data) {
+  public void sort(int[] data) {
     int n = data.length - 1;
     heapify(data);
     while (n > 0) {
@@ -27,16 +27,16 @@ public class Heap<E extends Comparable<E>> {
     }
   }
 
-  private void siftDown(E[] data, int n, int i) {
+  private void siftDown(int[] data, int n, int i) {
     while (i <= n) {
       int big = i;
-      if (2 * i + 1 <= n && data[2 * i + 1].compareTo(data[i]) > 0) {
+      if (2 * i + 1 <= n && data[2 * i + 1] > data[i]) {
         big = 2 * i + 1;
       }
-      if (2 * i + 2 <= n && data[2 * i + 2].compareTo(data[big]) > 0) {
+      if (2 * i + 2 <= n && data[2 * i + 2] > data[big]) {
         big = 2 * i + 2;
       }
-      if (data[big].compareTo(data[i]) > 0) {
+      if (data[big] > data[i]) {
         swap(data, big, i);
         i = big;
       } else {
@@ -45,8 +45,8 @@ public class Heap<E extends Comparable<E>> {
     }
   }
 
-  private void swap(E[] data, int i, int j) {
-    E tmp = data[i];
+  private void swap(int[] data, int i, int j) {
+    int tmp = data[i];
     data[i] = data[j];
     data[j] = tmp;
   }
