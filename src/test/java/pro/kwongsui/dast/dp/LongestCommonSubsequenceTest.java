@@ -11,12 +11,14 @@ class LongestCommonSubsequenceTest {
   @CsvSource({
       "'mitcmu', 'mtacnu', 4",
       "'nitcmu', 'mtacnu', 3",
-      "'mitt', 'mt', 2"
+      "'mitt', 'mt', 2",
+      "abcde, ace, 3",
+      "bl, yby, 1",
+      "bsbininm, jmjkbkjkv, 1",
+      "aba, a, 1"
   })
   void dp(String input1, String input2, int expected) {
-    LongestCommonSubsequence lcs = new LongestCommonSubsequence();
-    int[][] states = lcs.dp(input1.toCharArray(), input2.toCharArray());
-    assertEquals(expected, states[input1.length() - 1][input2.length() - 1]);
-    lcs.print(states);
+    assertEquals(expected,
+        new LongestCommonSubsequence().dp(input1.toCharArray(), input2.toCharArray()));
   }
 }

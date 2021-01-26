@@ -44,16 +44,12 @@ public class Knapsack {
     }
 
     for (int i = 1; i < weight.length; i++) {
+      // 从前往后遍历存在计算问题，尚未访问的数据被覆盖或者产生原本不存在的数据
       for (int j = w - weight[i]; j >= 0; j--) {
         if (states[j]) {
           states[j + weight[i]] = true;
         }
       }
-      // 存在重复计算问题
-//      for(int j = 0; j <= w - weight[i]; j++) {
-//        if(states[j])
-//          states[j + weight[i]] = true;
-//      }
     }
 
     for (int i = w; i >= 0; i--) {
@@ -114,7 +110,7 @@ public class Knapsack {
       states[weight[0]] = values[0];
     }
 
-    for (int i = 0; i < weight.length; i++) {
+    for (int i = 1; i < weight.length; i++) {
       for (int j = w - weight[i]; j >= 0; j--) {
         if (states[j] >= 0) {
           int val = states[j] + values[i];

@@ -2,29 +2,46 @@ package pro.kwongsui.dast.dp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.converter.ConvertWith;
+import org.junit.jupiter.params.provider.CsvSource;
+import pro.kwongsui.dast.util.IntArrayConverter;
 
 class KnapsackTest {
 
-  @Test
-  void dp() {
-    assertEquals(9, new Knapsack().dp(new int[]{2, 2, 4, 6, 3}, 9));
+  @ParameterizedTest
+  @CsvSource({
+      "'2,2,4,6,3', 9, 9"
+  })
+  void dp(@ConvertWith(IntArrayConverter.class) int[] input, int w, int expected) {
+    assertEquals(expected, new Knapsack().dp(input, w));
   }
 
-  @Test
-  void dp2() {
-    assertEquals(9, new Knapsack().dp2(new int[]{2, 2, 1, 3, 5}, 9));
+  @ParameterizedTest
+  @CsvSource({
+      "'2,2,1,3,5', 9, 9"
+  })
+  void dp2(@ConvertWith(IntArrayConverter.class) int[] input, int w, int expected) {
+    assertEquals(expected, new Knapsack().dp2(input, w));
   }
 
-  @Test
-  void dp3() {
-    assertEquals(15,
-        new Knapsack().dp3(new int[]{2, 2, 4, 6, 3}, new int[]{3, 4, 8, 3, 2}, 9));
+  @ParameterizedTest
+  @CsvSource({
+      "'2,2,4,6,3', '3,4,8,3,2', 9, 15"
+  })
+  void dp3(@ConvertWith(IntArrayConverter.class) int[] weight,
+      @ConvertWith(IntArrayConverter.class) int[] values,
+      int w, int expected) {
+    assertEquals(expected, new Knapsack().dp3(weight, values, w));
   }
 
-  @Test
-  void dp4() {
-    assertEquals(18,
-        new Knapsack().dp3(new int[]{2, 2, 1, 3, 5}, new int[]{3, 4, 8, 3, 2}, 9));
+  @ParameterizedTest
+  @CsvSource({
+      "'2,2,1,3,5', '3,4,8,3,2', 9, 18"
+  })
+  void dp4(@ConvertWith(IntArrayConverter.class) int[] weight,
+      @ConvertWith(IntArrayConverter.class) int[] values,
+      int w, int expected) {
+    assertEquals(expected, new Knapsack().dp4(weight, values, w));
   }
 }

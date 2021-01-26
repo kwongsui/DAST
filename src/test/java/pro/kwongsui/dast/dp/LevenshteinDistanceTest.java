@@ -14,9 +14,7 @@ class LevenshteinDistanceTest {
       "'mitt', 'mt', 2"
   })
   void dp(String input1, String input2, int expected) {
-    LevenshteinDistance ld = new LevenshteinDistance();
-    int[][] states = ld.dp(input1.toCharArray(), input2.toCharArray());
-    assertEquals(expected, states[input1.length() - 1][input2.length() - 1]);
-    ld.print(states);
+    assertEquals(expected,
+        new LevenshteinDistance().dp(input1.toCharArray(), input2.toCharArray()));
   }
 }
