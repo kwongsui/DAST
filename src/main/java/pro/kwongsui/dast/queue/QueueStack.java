@@ -17,7 +17,9 @@ public class QueueStack {
   }
 
   public int dequeue() {
-    if (out.isEmpty()) {
+    if (in.isEmpty() && out.isEmpty()) {
+      return -1;
+    } else if (out.isEmpty()) {
       while (!in.isEmpty()) {
         out.push(in.pop());
       }
