@@ -94,11 +94,7 @@ public class HashMapLinkedList<K, V> {
     }
 
     Entry<K, V> sentinel = newSlots[index];
-    if (sentinel.next == null) {
-      sentinel.next = new Entry<>(key, value, null); // 插入数据
-    } else {
-      sentinel.next = new Entry<>(key, value, sentinel.next); // 新数据插入链表头部
-    }
+    sentinel.next = new Entry<>(key, value, sentinel.next); // 新数据插入链表头部
 
     return value;
   }
