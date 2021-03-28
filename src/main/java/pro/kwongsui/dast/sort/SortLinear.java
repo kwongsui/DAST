@@ -1,23 +1,18 @@
 package pro.kwongsui.dast.sort;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class SortLinear {
-  public static void main(String[] args) {
-    int[] arr = new int[] {230, 331, 231, 343, 453, 454, 34, 45, 345, 59, 9};
-    //    radix(arr, 3);
-    count(arr, 11);
-    System.out.println(Arrays.toString(arr));
-  }
 
-  public static void radix(int[] arr, int n) { // n是数组中元素位数
-    ArrayList[] buckets = new ArrayList[10];
+  @SuppressWarnings("unchecked")
+  public void radix(int[] arr, int n) { // n是数组中元素位数
+    List<Integer>[] buckets = new ArrayList[10];
     for (int i = 0; i < buckets.length; i++) buckets[i] = new ArrayList<>();
     // Arrays.fill(buckets, new ArrayList<Integer>()); // 填充的是同一个ArrayList
 
     for (int digit = 0; digit < n; digit++) {
-      for (ArrayList bucket : buckets) bucket.clear();
+      for (List<Integer> bucket : buckets) bucket.clear();
 
       for (int val : arr) {
         int key = getKey(val, digit);
@@ -25,22 +20,17 @@ public class SortLinear {
       }
 
       int k = 0;
-      for (ArrayList bucket : buckets) for (Object val : bucket) arr[k++] = (int) val;
+      for (List<Integer> bucket : buckets) for (Object val : bucket) arr[k++] = (int) val;
     }
   }
 
-  private static int getKey(int val, int digit) {
-    //    while (digit > 0) {
-    //      val /= 10;
-    //      digit--;
-    //    }
-    //    return val % 10;
+  private int getKey(int val, int digit) {
     int result = 1;
     for (int i = 0; i < digit; i++) result *= 10;
     return (val / result) % 10;
   }
 
-  public static void count(int[] arr, int n) {
+  public void count(int[] arr, int n) {
     // 原始数组：元素范围
     int max = arr[0];
     for (int i = 1; i < n; i++) if (arr[i] > max) max = arr[i];
