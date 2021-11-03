@@ -13,18 +13,13 @@ public class DynamicArray {
   }
 
   public void add(int index, int value) {
-    if (index < 0) {
+    if (index < 0 || index > size) {
       throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
     }
-    if (index > size) {
-      index = size;
-    }
-    if (size >= data.length) {
+    if (size + 1 > data.length) {
       resize();
     }
-    if (size - index >= 0) {
-      System.arraycopy(data, index, data, index + 1, size - index);
-    }
+    System.arraycopy(data, index, data, index + 1, size - index);
     data[index] = value;
     size++;
   }
@@ -35,16 +30,18 @@ public class DynamicArray {
     data = newData;
   }
 
-  public void remove(int index) {
+  public int remove(int index) {
     checkIndex(index);
+    int old = data[index];
     if (size - index - 1 > 0) {
       System.arraycopy(data, index + 1, data, index, size - index - 1);
     }
     size--;
+    return old;
   }
 
   private void checkIndex(int index) {
-    if (index < 0 || index >= size) {
+    if (index >= size) {
       throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
     }
   }

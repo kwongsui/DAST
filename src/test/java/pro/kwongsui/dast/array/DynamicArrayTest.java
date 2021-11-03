@@ -21,7 +21,7 @@ class DynamicArrayTest {
   @ParameterizedTest
   @CsvSource({
       "'0,1,2,3', 4, '0,1,2,3,4'",
-      "'0,1,2,3,4', 6, '0,1,2,3,4,6,0,0,0,0'"
+      "'0,1,2,3,4', 5, '0,1,2,3,4,5,0,0,0,0'"
   })
   void add(
       @ConvertWith(IntArrayConverter.class) int[] input1,
@@ -36,6 +36,7 @@ class DynamicArrayTest {
 
   @ParameterizedTest
   @CsvSource({
+      "'0,1,2,3,4', 2, '0,1,3,4,4'",
       "'0,1,2,3,4', 4, '0,1,2,3,4'",
       "'0,1,2,3,4,5', 5, '0,1,2,3,4,5,0,0,0,0'"
   })
@@ -46,7 +47,7 @@ class DynamicArrayTest {
     for (int v : input1) {
       arr.add(v, v);
     }
-    arr.remove(input2);
+    assertEquals(arr.remove(input2), input2);
     assertArrayEquals(expected, arr.getData());
   }
 
@@ -63,7 +64,7 @@ class DynamicArrayTest {
     for (int v : input1) {
       arr.add(v, v);
     }
-    arr.set(input2, input3);
+    assertEquals(arr.set(input2, input3), input2);
     assertArrayEquals(expected, arr.getData());
   }
 
